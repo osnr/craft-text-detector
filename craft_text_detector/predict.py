@@ -16,7 +16,7 @@ def get_prediction(
     text_threshold: float = 0.7,
     link_threshold: float = 0.4,
     low_text: float = 0.4,
-    cuda: bool = False,
+    device: str = "cpu",
     long_size: int = 1280,
     poly: bool = True,
 ):
@@ -29,7 +29,7 @@ def get_prediction(
         text_threshold: text confidence threshold
         link_threshold: link confidence threshold
         low_text: text low-bound score
-        cuda: Use cuda for inference
+        device: Device for inference (e.g., "cpu", "cuda", "mps")
         canvas_size: image size for inference
         long_size: desired longest image size for inference
         poly: enable polygon type
@@ -58,8 +58,7 @@ def get_prediction(
     x = image_utils.normalizeMeanVariance(img_resized)
     x = torch_utils.from_numpy(x).permute(2, 0, 1)  # [h, w, c] to [c, h, w]
     x = torch_utils.Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
-    if cuda:
-        x = x.cuda()
+    x = x.to(device)
     preprocessing_time = time.time() - t0
     t0 = time.time()
 

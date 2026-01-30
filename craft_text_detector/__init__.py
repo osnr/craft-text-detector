@@ -41,7 +41,7 @@ class Craft:
         text_threshold=0.7,
         link_threshold=0.4,
         low_text=0.4,
-        cuda=False,
+        device="cpu",
         long_size=1280,
         refiner=True,
         crop_type="poly",
@@ -56,7 +56,7 @@ class Craft:
             text_threshold: text confidence threshold
             link_threshold: link confidence threshold
             low_text: text low-bound score
-            cuda: Use cuda for inference
+            device: Device for inference (e.g., "cpu", "cuda", "mps")
             long_size: desired longest image size for inference
             refiner: enable link refiner
             crop_type: crop regions by detected boxes or polys ("poly" or "box")
@@ -69,7 +69,7 @@ class Craft:
         self.text_threshold = text_threshold
         self.link_threshold = link_threshold
         self.low_text = low_text
-        self.cuda = cuda
+        self.device = device
         self.long_size = long_size
         self.refiner = refiner
         self.crop_type = crop_type
@@ -84,13 +84,13 @@ class Craft:
         """
         Loads craftnet model
         """
-        self.craft_net = load_craftnet_model(self.cuda, weight_path=weight_path)
+        self.craft_net = load_craftnet_model(self.device, weight_path=weight_path)
 
     def load_refinenet_model(self, weight_path: Optional[str] = None):
         """
         Loads refinenet model
         """
-        self.refine_net = load_refinenet_model(self.cuda, weight_path=weight_path)
+        self.refine_net = load_refinenet_model(self.device, weight_path=weight_path)
 
     def unload_craftnet_model(self):
         """
@@ -135,7 +135,7 @@ class Craft:
             text_threshold=self.text_threshold,
             link_threshold=self.link_threshold,
             low_text=self.low_text,
-            cuda=self.cuda,
+            device=self.device,
             long_size=self.long_size,
         )
 

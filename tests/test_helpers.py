@@ -16,23 +16,23 @@ class TestCraftTextDetectorHelpers(unittest.TestCase):
     image_path = "figures/idcard.png"
 
     def test_load_craftnet_model(self):
-        craft_net = load_craftnet_model(cuda=False)
+        craft_net = load_craftnet_model(device="cpu")
         self.assertTrue(craft_net)
 
         with TemporaryDirectory() as dir_name:
             weight_path = Path(dir_name, "weights.pth")
             self.assertFalse(weight_path.is_file())
-            load_craftnet_model(cuda=False, weight_path=weight_path)
+            load_craftnet_model(device="cpu", weight_path=weight_path)
             self.assertTrue(weight_path.is_file())
 
     def test_load_refinenet_model(self):
-        refine_net = load_refinenet_model(cuda=False)
+        refine_net = load_refinenet_model(device="cpu")
         self.assertTrue(refine_net)
 
         with TemporaryDirectory() as dir_name:
             weight_path = Path(dir_name, "weights.pth")
             self.assertFalse(weight_path.is_file())
-            load_refinenet_model(cuda=False, weight_path=weight_path)
+            load_refinenet_model(device="cpu", weight_path=weight_path)
             self.assertTrue(weight_path.is_file())
 
     def test_read_image(self):
@@ -51,7 +51,7 @@ class TestCraftTextDetectorHelpers(unittest.TestCase):
         text_threshold = 0.9
         link_threshold = 0.2
         low_text = 0.2
-        cuda = False
+        device = "cpu"
         prediction_result = get_prediction(
             image=image,
             craft_net=craft_net,
@@ -59,7 +59,7 @@ class TestCraftTextDetectorHelpers(unittest.TestCase):
             text_threshold=text_threshold,
             link_threshold=link_threshold,
             low_text=low_text,
-            cuda=cuda,
+            device=device,
             long_size=720,
         )
 
@@ -84,7 +84,7 @@ class TestCraftTextDetectorHelpers(unittest.TestCase):
         text_threshold = 0.9
         link_threshold = 0.2
         low_text = 0.2
-        cuda = False
+        device = "cpu"
         prediction_result = get_prediction(
             image=image,
             craft_net=craft_net,
@@ -92,7 +92,7 @@ class TestCraftTextDetectorHelpers(unittest.TestCase):
             text_threshold=text_threshold,
             link_threshold=link_threshold,
             low_text=low_text,
-            cuda=cuda,
+            device=device,
             long_size=720,
         )
 

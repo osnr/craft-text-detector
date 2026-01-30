@@ -92,6 +92,7 @@ class CraftNet(nn.Module):
 
 
 if __name__ == "__main__":
-    model = CraftNet(pretrained=True).cuda()
-    output, _ = model(torch.randn(1, 3, 768, 768).cuda())
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = CraftNet(pretrained=True).to(device)
+    output, _ = model(torch.randn(1, 3, 768, 768).to(device))
     print(output.shape)

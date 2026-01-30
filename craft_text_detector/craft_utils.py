@@ -35,7 +35,7 @@ def copyStateDict(state_dict):
 
 
 def load_craftnet_model(
-        cuda: bool = False,
+        device: str = "cpu",
         weight_path: Optional[Union[str, Path]] = None
 ):
     # get craft net path
@@ -64,22 +64,21 @@ def load_craftnet_model(
         file_utils.download(url=url, save_path=weight_path)
 
     # arange device
-    if cuda:
-        craft_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
-
-        craft_net = craft_net.cuda()
-        craft_net = torch_utils.DataParallel(craft_net)
-        torch_utils.cudnn_benchmark = False
-    else:
+    if device == "cpu":
         craft_net.load_state_dict(
             copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
         )
+    else:
+        craft_net.load_state_dict(copyStateDict(torch_utils.load(weight_path, map_location=device)))
+        craft_net = craft_net.to(device)
+        craft_net = torch_utils.DataParallel(craft_net)
+        torch_utils.cudnn_benchmark = False
     craft_net.eval()
     return craft_net
 
 
 def load_refinenet_model(
-        cuda: bool = False,
+        device: str = "cpu",
         weight_path: Optional[Union[str, Path]] = None
 ):
     # get refine net path
@@ -108,16 +107,15 @@ def load_refinenet_model(
         file_utils.download(url=url, save_path=weight_path)
 
     # arange device
-    if cuda:
-        refine_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
-
-        refine_net = refine_net.cuda()
-        refine_net = torch_utils.DataParallel(refine_net)
-        torch_utils.cudnn_benchmark = False
-    else:
+    if device == "cpu":
         refine_net.load_state_dict(
             copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
         )
+    else:
+        refine_net.load_state_dict(copyStateDict(torch_utils.load(weight_path, map_location=device)))
+        refine_net = refine_net.to(device)
+        refine_net = torch_utils.DataParallel(refine_net)
+        torch_utils.cudnn_benchmark = False
     refine_net.eval()
     return refine_net
 

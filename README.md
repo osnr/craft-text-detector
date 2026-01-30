@@ -39,7 +39,7 @@ image = 'figures/idcard.png' # can be filepath, PIL image or numpy array
 output_dir = 'outputs/'
 
 # create a craft instance
-craft = Craft(output_dir=output_dir, crop_type="poly", cuda=False)
+craft = Craft(output_dir=output_dir, crop_type="poly", device="cpu")
 
 # apply craft text detection and export detected regions to output directory
 prediction_result = craft.detect_text(image)
@@ -71,8 +71,8 @@ output_dir = 'outputs/'
 image = read_image(image)
 
 # load models
-refine_net = load_refinenet_model(cuda=True)
-craft_net = load_craftnet_model(cuda=True)
+refine_net = load_refinenet_model(device="cuda")
+craft_net = load_craftnet_model(device="cuda")
 
 # perform prediction
 prediction_result = get_prediction(
@@ -82,7 +82,7 @@ prediction_result = get_prediction(
     text_threshold=0.7,
     link_threshold=0.4,
     low_text=0.4,
-    cuda=True,
+    device="cuda",
     long_size=1280
 )
 
